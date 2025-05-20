@@ -1,0 +1,75 @@
+﻿@using Voting.Blazor.Model;
+@using Voting.Shared.DTOs;
+
+@inject IVotingModel VotingModel;
+@inject NavigationManager Navigation;
+
+@page "/registration"
+
+<h3>Registration</h3>
+<EditForm Model="regModel" OnValidSubmit="HandleRegistration">
+    <DataAnnotationsValidator />
+
+    <div class="container">
+        @if (registrationFailed)
+        {
+            <div class="alert alert-danger" role="alert">
+                A regisztráció sikertelen!
+            </div>
+        }
+        <div class="row mb-3">
+            <div class="col">
+                <label for="name">Név:</label>
+                <InputText id="name" class="form-control" @bind-Value="regModel.Name" />
+                <ValidationMessage For="@(() => regModel.Name)" />
+            </div>
+        </div>
+        <div class="row mb-3">
+            <div class="col">
+                <label for="email">Email cím:</label>
+                <InputText id="email" class="form-control" @bind-Value="regModel.Email" />
+                <ValidationMessage For="@(() => regModel.Email)" />
+            </div>
+        </div>
+        <div class="row mb-3">
+            <div class="col">
+                <label for="password">Jelszó:</label>
+                <InputText id="password" type="password" class="form-control" @bind-Value="regModel.Password" />
+                <ValidationMessage For="@(() => regModel.Password)" />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col text-end">
+                <button type="submit" class="btn btn-primary me-2">Register</button>
+            </div>
+        </div>
+    </div>
+</EditForm>
+
+
+@code {
+    private UserDto regModel = new() { Name = "", Email = "", Password = "" };
+    private bool registrationFailed = false;
+
+    private async Task HandleRegistration()
+    {
+        if (await VotingModel.RegisterAsync(regModel)){
+
+            bool isAuthenticated = await VotingModel.LoginAsync(regModel.Email, regModel.Password!, useCookies: false);
+
+            if (isAuthenticated)
+            {
+                registrationFailed = false;
+                Navigation.NavigateTo("/");
+            }
+            else
+            {
+                registrationFailed = true;
+            }
+        }
+        else{
+            registrationFailed = true;
+        }
+        
+    }
+}

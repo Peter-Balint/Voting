@@ -1,0 +1,45 @@
+﻿@page "/polls/vote/{Id:int}"
+
+@using Voting.Blazor.Model;
+@using Voting.Shared.DTOs;
+
+@inject NavigationManager Navigation;
+@inject IVotingModel VotingModel;
+
+@if(poll != null){
+    <h3>Voting on poll #@poll.Id</h3>
+    <h2>@poll.Question</h2>
+    <table class="table table-striped">
+        <tbody>
+            @foreach (var answer in poll.AnswerOptions)
+            {
+                <tr>
+                    <td>@answer.InternalAnswerId</td>
+                    <td>@answer.AnswerText</td>
+                    <td>
+                        <button @onclick="()=>VoteFor(answer.InternalAnswerId)">Vote</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+
+@code {
+    [Parameter]
+    public int Id { get; set; }
+
+    private PollDto? poll;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await VotingModel.ReadActiveDetailedPollAsync(Id);
+        poll = VotingModel.ActiveDetailedPoll;
+        StateHasChanged();
+    }
+    private void VoteFor(int intId)
+    {
+        Navigation.NavigateTo("");
+    }
+}

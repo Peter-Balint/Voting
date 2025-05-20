@@ -1,0 +1,45 @@
+﻿@page "/"
+
+@using Voting.Blazor.Model;
+@using Voting.Shared.DTOs;
+
+@inject NavigationManager Navigation;
+@inject IVotingModel VotingModel;
+
+<h2>Active Polls</h2>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>PollId</th>
+            <th>Question</th>
+            <th>Start Date</th>
+            <th>End Date</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var poll in VotingModel.Polls)
+        {
+            <tr @onclick="() => GoToVoteOn(poll)">
+                <td>@poll.Id</td>
+                <td>@poll.Question</td>
+                <td>@poll.StartsAt</td>
+                <td>@poll.EndsAt</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+Welcome.
+
+@code{
+    protected override async Task OnInitializedAsync()
+    {
+        await VotingModel.ReadActivePollsAsync();
+        StateHasChanged();
+    }
+
+    private void GoToVoteOn(PollDto poll)
+    {
+        Navigation.NavigateTo($"/polls/vote/{poll.Id}");
+    }
+}
