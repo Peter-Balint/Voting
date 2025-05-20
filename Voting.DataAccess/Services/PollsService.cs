@@ -20,6 +20,15 @@ namespace Voting.DataAccess.Services
                 .Where(p => p.StartsAt < DateTime.Now && p.EndsAt > DateTime.Now)
                 .ToListAsync();
         }
+
+        public async Task<IReadOnlyCollection<Poll>> GetPastPolls()
+        {
+            return await _context.Polls
+                .OrderBy(p => p.StartsAt)
+                .Where(p => p.EndsAt < DateTime.Now)
+                .ToListAsync();
+        }
+
         public async Task<Poll> GetDetailedPollById(int id)
         {
             var poll =  await _context.Polls

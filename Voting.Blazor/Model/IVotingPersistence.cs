@@ -5,6 +5,7 @@ namespace Voting.Blazor.Model
     public interface IVotingPersistence
     {
         Task<IEnumerable<PollDto>> ReadActivePollsAsync();
+        Task<IEnumerable<PollDto>> ReadPastPollsAsync();
         Task<PollDto> ReadDetailedPollByIdAsync(int id);
 
         Task<Boolean> LoginAsync(string email, string password);

@@ -7,19 +7,6 @@ namespace Voting.Blazor.Model
     {
         private HttpClient _client;
 
-        /// <summary>
-        /// Szolgáltatás alapú perszisztencia példányosítása.
-        /// </summary>
-        /// <param name="baseAddress">A szolgáltatás címe.</param>
-        public VotingPersistence(string baseAddress)
-        {
-            _client = new HttpClient(); // a szolgáltatás kliense
-            _client.BaseAddress = new Uri(baseAddress); // megadjuk neki a címet
-        }
-        public VotingPersistence()
-        {
-            _client = new HttpClient(); // a szolgáltatás kliense
-        }
         public VotingPersistence(HttpClient client)
         {
             _client = client;
@@ -29,12 +16,32 @@ namespace Voting.Blazor.Model
         {
             try
             {
-                // a kéréseket a kliensen keresztül végezzük
                 HttpResponseMessage response = await _client.GetAsync("api/Polls/");
-                if (response.IsSuccessStatusCode) // amennyiben sikeres a művelet
+                if (response.IsSuccessStatusCode)
                 {
                     IEnumerable<PollDto> Polls = await response.Content.ReadAsAsync<IEnumerable<PollDto>>();
-                    // a tartalmat JSON formátumból objektumokká alakítjuk
+
+
+                    return Polls;
+                }
+                else
+                {
+                    throw new PersistenceUnavailableException("Service returned response: " + response.StatusCode);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new PersistenceUnavailableException(ex);
+            }
+        }
+        public async Task<IEnumerable<PollDto>> ReadPastPollsAsync()
+        {
+            try
+            {
+                HttpResponseMessage response = await _client.GetAsync("api/Polls/past");
+                if (response.IsSuccessStatusCode)
+                {
+                    IEnumerable<PollDto> Polls = await response.Content.ReadAsAsync<IEnumerable<PollDto>>();
 
                     return Polls;
                 }

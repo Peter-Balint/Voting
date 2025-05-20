@@ -30,6 +30,16 @@ namespace Voting.WebAPI.Controllers
         }
 
         [HttpGet]
+        [Route("past")]
+        public async Task<IActionResult> GetPastPolls()
+        {
+            var polls = await _pollsService.GetPastPolls();
+            var pollDtos = _mapper.Map<List<PollDto>>(polls);
+
+            return Ok(pollDtos);
+        }
+
+        [HttpGet]
         [Route("{id}")]
         public async Task<IActionResult> GetDetailedPollById(int id)
         {

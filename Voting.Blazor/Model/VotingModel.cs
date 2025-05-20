@@ -21,6 +21,10 @@ namespace Voting.Blazor.Model
         {
             _polls = (await _persistence.ReadActivePollsAsync()).ToList();
         }
+        public async Task ReadPastPollsAsync()
+        {
+            _polls = (await _persistence.ReadPastPollsAsync()).ToList();
+        }
         public async Task ReadActiveDetailedPollAsync(int id) 
         { 
             ActiveDetailedPoll = await _persistence.ReadDetailedPollByIdAsync(id);

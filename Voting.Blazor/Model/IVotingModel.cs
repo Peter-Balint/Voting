@@ -9,6 +9,7 @@ namespace Voting.Blazor.Model
         PollDto ActiveDetailedPoll { get; }
 
         Task ReadActivePollsAsync();
+        Task ReadPastPollsAsync();
         Task ReadActiveDetailedPollAsync(int id);
 
         Task<Boolean> LoginAsync(string userName, string userPassword, bool useCookies = true);

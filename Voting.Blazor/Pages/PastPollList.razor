@@ -1,4 +1,4 @@
-﻿@page "/"
+﻿@page "/polls/past"
 
 @using Voting.Blazor.Model;
 @using Voting.Shared.DTOs;
@@ -6,7 +6,8 @@
 @inject NavigationManager Navigation;
 @inject IVotingModel VotingModel;
 
-<h2>Active Polls</h2>
+<h2>Past Polls</h2>
+
 <table class="table table-striped">
     <thead>
         <tr>
@@ -19,7 +20,7 @@
     <tbody>
         @foreach (var poll in VotingModel.Polls)
         {
-            <tr @onclick="() => GoToVoteOn(poll)">
+            <tr >
                 <td>@poll.Id</td>
                 <td>@poll.Question</td>
                 <td>@poll.StartsAt</td>
@@ -29,16 +30,10 @@
     </tbody>
 </table>
 
-
-@code{
+@code {
     protected override async Task OnInitializedAsync()
     {
-        await VotingModel.ReadActivePollsAsync();
+        await VotingModel.ReadPastPollsAsync();
         StateHasChanged();
-    }
-
-    private void GoToVoteOn(PollDto poll)
-    {
-        Navigation.NavigateTo($"/polls/vote/{poll.Id}");
     }
 }
