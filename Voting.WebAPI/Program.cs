@@ -15,6 +15,7 @@ namespace Voting.WebAPI
             // Add services to the container.
 
             builder.Services.AddControllers();
+
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
@@ -36,12 +37,7 @@ namespace Voting.WebAPI
                 {
                     options.ForwardDefaultSelector = context =>
                     {
-                        // Use token if there's an Authorization header, else use Cookies
-                        /*var authHeader = context.Request.Headers["Authorization"].FirstOrDefault();
-                        if (!string.IsNullOrEmpty(authHeader) && authHeader.StartsWith("Bearer "))*/
-                            return "Token";
-
-                        //return "Identity.Application";
+                        return "Token";
                     };
                 });
 
@@ -69,6 +65,8 @@ namespace Voting.WebAPI
 
                 app.UseCors("BlazorPolicy");
             }
+
+            app.UseExceptionHandler();
 
             app.UseHttpsRedirection();
 
