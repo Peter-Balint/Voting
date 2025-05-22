@@ -10,3 +10,4 @@ Made of an ASP.NET webapi, using Entity Framework ORM (local MSSSQL database) wi
 Only brought to GitHub recently, which is why the commit history is relatively empty.
 
 Setup: The projects Voting.WebAPI and Voting.Blazor should be ran together. Ports and the database connection string can be modified in their respective appsettings.json files, should the default values be unsuitable.
+User account registered for testing: user@example.com, pw: user@123
